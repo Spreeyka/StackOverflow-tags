@@ -17,6 +17,14 @@ interface DataTableViewOptionsProps<TData> {
   table: Table<TData>;
 }
 
+export const viewNames: Record<string, string> = {
+  name: "name",
+  is_moderator_only: "moderator only",
+  is_required: "required",
+  has_synonyms: "synonyms",
+  count: "count",
+};
+
 export function DataTableViewOptions<TData>({ table }: DataTableViewOptionsProps<TData>) {
   return (
     <DropdownMenu>
@@ -40,7 +48,7 @@ export function DataTableViewOptions<TData>({ table }: DataTableViewOptionsProps
                 checked={column.getIsVisible()}
                 onCheckedChange={(value) => column.toggleVisibility(!!value)}
               >
-                {column.id}
+                {viewNames[column.id]}
               </DropdownMenuCheckboxItem>
             );
           })}

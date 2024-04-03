@@ -2,100 +2,80 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 
-import { labels, priorities, statuses } from "../data/data";
-import { Task } from "../data/schema";
+import { statuses } from "../data/data";
+import { Tag } from "../data/schema";
 import { DataTableColumnHeader } from "./data-table-column-header";
-import { DataTableRowActions } from "./data-table-row-actions";
-import { Checkbox } from "@radix-ui/react-checkbox";
-import { Badge } from "./ui/badge";
 
-export const columns: ColumnDef<Task>[] = [
+export const columns: ColumnDef<Tag>[] = [
   {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && "indeterminate")}
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-        className="translate-y-[2px]"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-        className="translate-y-[2px]"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
+    accessorKey: "name",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Name" />,
+    cell: ({ row }) => <div className="flex justify-center items-center -ml-5">{row.getValue("name")}</div>,
   },
   {
-    accessorKey: "id",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Task" />,
-    cell: ({ row }) => <div className="w-[80px]">{row.getValue("id")}</div>,
-    enableSorting: false,
-    enableHiding: false,
-  },
-  {
-    accessorKey: "title",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Title" />,
+    accessorKey: "has_synonyms",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Synonyms" />,
     cell: ({ row }) => {
-      const label = labels.find((label) => label.value === row.original.label);
-
-      return (
-        <div className="flex space-x-2">
-          {label && <Badge variant="outline">{label.label}</Badge>}
-          <span className="max-w-[500px] truncate font-medium">{row.getValue("title")}</span>
-        </div>
-      );
-    },
-  },
-  {
-    accessorKey: "status",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Status" />,
-    cell: ({ row }) => {
-      const status = statuses.find((status) => status.value === row.getValue("status"));
+      const status = statuses.find((status) => status.value === row.getValue("has_synonyms"));
 
       if (!status) {
         return null;
       }
 
       return (
-        <div className="flex w-[100px] items-center">
-          {status.icon && <status.icon className="mr-2 h-4 w-4 text-muted-foreground" />}
-          <span>{status.label}</span>
+        <div className="flex justify-center items-center">
+          <status.icon className={status.value ? "text-green-500" : "text-red-500"} width="20" height="20" />
         </div>
       );
     },
-    filterFn: (row, id, value) => {
-      return value.includes(row.getValue(id));
-    },
+    enableSorting: false,
   },
   {
-    accessorKey: "priority",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Priority" />,
+    accessorKey: "is_moderator_only",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Moderator only" />,
     cell: ({ row }) => {
-      const priority = priorities.find((priority) => priority.value === row.getValue("priority"));
+      const status = statuses.find((status) => status.value === row.getValue("has_synonyms"));
 
-      if (!priority) {
+      if (!status) {
         return null;
       }
 
       return (
-        <div className="flex items-center">
-          {priority.icon && <priority.icon className="mr-2 h-4 w-4 text-muted-foreground" />}
-          <span>{priority.label}</span>
+        <div className="flex justify-center items-center">
+          <status.icon className={status.value ? "text-green-500" : "text-red-500"} width="20" height="20" />
         </div>
       );
     },
-    filterFn: (row, id, value) => {
-      return value.includes(row.getValue(id));
-    },
+    enableSorting: false,
   },
   {
-    id: "actions",
-    cell: ({ row }) => <DataTableRowActions row={row} />,
+    accessorKey: "is_required",
+
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Required" />,
+    cell: ({ row }) => {
+      const status = statuses.find((status) => status.value === row.getValue("is_required"));
+
+      if (!status) {
+        return null;
+      }
+
+      return (
+        <div className="flex justify-center items-center">
+          <status.icon className={status.value ? "text-green-500" : "text-red-500"} width="20" height="20" />
+        </div>
+      );
+    },
+    enableSorting: false,
+  },
+  {
+    accessorKey: "count",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Count" className="justify-center ml-6" />,
+    cell: ({ row }) => {
+      return (
+        <div className="flex justify-center items-center">
+          <div className="">{String(row.getValue("count"))}</div>
+        </div>
+      );
+    },
   },
 ];
