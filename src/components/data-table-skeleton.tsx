@@ -13,7 +13,7 @@ import { useMemo } from "react";
 
 export function TableSkeleton() {
   const searchParams = useSearchParams();
-  const pagesize = Number(searchParams.get("pagesize"));
+  const pagesize = Number(searchParams.get("pagesize")) || 10;
 
   const data = useMemo(() => {
     return Array(pagesize).fill({
