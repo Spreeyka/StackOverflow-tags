@@ -37,7 +37,7 @@ export const columns: ColumnDef<Tag>[] = [
     accessorKey: "is_moderator_only",
     header: ({ column }) => <DataTableColumnHeader column={column} title="Moderator only" />,
     cell: ({ row }) => {
-      const status = statuses.find((status) => status.value === row.getValue("has_synonyms"));
+      const status = statuses.find((status) => status.value === row.getValue("is_moderator_only"));
 
       if (!status) {
         return null;

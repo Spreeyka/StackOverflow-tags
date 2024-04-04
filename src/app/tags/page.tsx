@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 
-import { TableSkeleton } from "@/components/table-skeleton";
+import { TableSkeleton } from "@/components/data-table-skeleton";
 import { Suspense } from "react";
 import Table from "./table";
 

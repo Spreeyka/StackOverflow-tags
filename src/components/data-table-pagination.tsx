@@ -17,7 +17,7 @@ export function DataTablePagination<TData>({ table, disabled }: DataTablePaginat
   const params = new URLSearchParams(searchParams);
 
   return (
-    <div className="flex items-center justify-between px-2">
+    <div className="flex items-center justify-between px-[2px]">
       <div className="flex-1 text-sm text-muted-foreground"></div>
       <div className="flex items-center space-x-6 lg:space-x-8">
         <div className="flex items-center space-x-2">
