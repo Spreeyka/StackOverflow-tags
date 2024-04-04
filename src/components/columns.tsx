@@ -9,11 +9,14 @@ import { DataTableColumnHeader } from "./data-table-column-header";
 export const columns: ColumnDef<Tag>[] = [
   {
     accessorKey: "name",
+    minSize: 200,
+
     header: ({ column }) => <DataTableColumnHeader column={column} title="Name" />,
     cell: ({ row }) => <div className="flex justify-center items-center -ml-5">{row.getValue("name")}</div>,
   },
   {
     accessorKey: "has_synonyms",
+
     header: ({ column }) => <DataTableColumnHeader column={column} title="Synonyms" />,
     cell: ({ row }) => {
       const status = statuses.find((status) => status.value === row.getValue("has_synonyms"));
@@ -50,7 +53,6 @@ export const columns: ColumnDef<Tag>[] = [
   },
   {
     accessorKey: "is_required",
-
     header: ({ column }) => <DataTableColumnHeader column={column} title="Required" />,
     cell: ({ row }) => {
       const status = statuses.find((status) => status.value === row.getValue("is_required"));
@@ -73,7 +75,7 @@ export const columns: ColumnDef<Tag>[] = [
     cell: ({ row }) => {
       return (
         <div className="flex justify-center items-center">
-          <div className="">{String(row.getValue("count"))}</div>
+          <div>{String(row.getValue("count"))}</div>
         </div>
       );
     },

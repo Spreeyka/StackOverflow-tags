@@ -7,12 +7,13 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 interface DataTablePaginationProps<TData> {
   table: Table<TData>;
+  disabled?: boolean;
 }
 
-export function DataTablePagination<TData>({ table }: DataTablePaginationProps<TData>) {
+export function DataTablePagination<TData>({ table, disabled }: DataTablePaginationProps<TData>) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
-  const { replace } = useRouter();
+  const { replace, refresh } = useRouter();
   const params = new URLSearchParams(searchParams);
 
   return (
@@ -59,7 +60,7 @@ export function DataTablePagination<TData>({ table }: DataTablePaginationProps<T
 
               replace(`${pathname}?${params.toString()}`);
             }}
-            disabled={!table.getCanPreviousPage()}
+            disabled={!table.getCanPreviousPage() || disabled}
           >
             <span className="sr-only">Go to first page</span>
             <DoubleArrowLeftIcon className="h-4 w-4" />
@@ -78,7 +79,7 @@ export function DataTablePagination<TData>({ table }: DataTablePaginationProps<T
 
               replace(`${pathname}?${params.toString()}`);
             }}
-            disabled={!table.getCanPreviousPage()}
+            disabled={!table.getCanPreviousPage() || disabled}
           >
             <span className="sr-only">Go to previous page</span>
             <ChevronLeftIcon className="h-4 w-4" />
@@ -97,7 +98,7 @@ export function DataTablePagination<TData>({ table }: DataTablePaginationProps<T
 
               replace(`${pathname}?${params.toString()}`);
             }}
-            disabled={!table.getCanNextPage()}
+            disabled={!table.getCanNextPage() || disabled}
           >
             <span className="sr-only">Go to next page</span>
             <ChevronRightIcon className="h-4 w-4" />
@@ -110,7 +111,7 @@ export function DataTablePagination<TData>({ table }: DataTablePaginationProps<T
               params.set("page", String(table.getPageCount()));
               replace(`${pathname}?${params.toString()}`);
             }}
-            disabled={!table.getCanNextPage()}
+            disabled={!table.getCanNextPage() || disabled}
           >
             <span className="sr-only">Go to last page</span>
             <DoubleArrowRightIcon className="h-4 w-4" />

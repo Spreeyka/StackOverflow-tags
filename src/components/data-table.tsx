@@ -33,8 +33,6 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const searchParams = useSearchParams();
 
-  console.log("data", data);
-
   const table = useReactTable({
     data,
     columns,
@@ -46,7 +44,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
     },
     initialState: {
       pagination: {
-        pageIndex: searchParams.get("page") ? Number(searchParams.get("page")) - 1 : 1,
+        pageIndex: searchParams.get("page") ? Number(searchParams.get("page")) - 1 : 0,
         pageSize: searchParams.get("pagesize") ? Number(searchParams.get("pagesize")) : 10,
       },
     },
@@ -66,9 +64,12 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
 
   return (
     <div className="space-y-4 !mt-0">
-      <DataTableToolbar table={table} />
+      <div className="flex justify-between mt-8 w-full">
+        <DataTableToolbar table={table} />
+        <DataTablePagination table={table} />
+      </div>
       <div className="rounded-md border">
-        <Table>
+        <Table className="min-w-[800px]">
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
@@ -89,37 +90,26 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
                   Unexpected error occurred while loading data...
                 </TableCell>
               </TableRow>
+            ) : table.getRowModel().rows?.length ? (
+              table.getRowModel().rows.map((row) => (
+                <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id} style={{ width: cell.column.getSize() }} className="!px-1">
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
             ) : (
-              <React.Suspense
-                fallback={
-                  <TableRow>
-                    <TableCell colSpan={columns.length} className="h-24 text-center">
-                      Loading tags...
-                    </TableCell>
-                  </TableRow>
-                }
-              >
-                {table.getRowModel().rows?.length ? (
-                  table.getRowModel().rows.map((row) => (
-                    <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
-                      {row.getVisibleCells().map((cell) => (
-                        <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
-                      ))}
-                    </TableRow>
-                  ))
-                ) : (
-                  <TableRow>
-                    <TableCell colSpan={columns.length} className="h-24 text-center">
-                      No results.
-                    </TableCell>
-                  </TableRow>
-                )}
-              </React.Suspense>
+              <TableRow>
+                <TableCell colSpan={columns.length} className="h-24 text-center">
+                  No results.
+                </TableCell>
+              </TableRow>
             )}
           </TableBody>
         </Table>
       </div>
-      <DataTablePagination table={table} />
     </div>
   );
 }
