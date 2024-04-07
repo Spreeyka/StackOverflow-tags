@@ -47,6 +47,12 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
         pageIndex: searchParams.get("page") ? Number(searchParams.get("page")) - 1 : 0,
         pageSize: searchParams.get("pagesize") ? Number(searchParams.get("pagesize")) : 10,
       },
+      sorting: [
+        {
+          id: "name",
+          desc: true,
+        },
+      ],
     },
     enableRowSelection: true,
     onRowSelectionChange: setRowSelection,
@@ -56,8 +62,8 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     manualPagination: true,
+    manualSorting: true,
     pageCount: 25, // max 25 pages on free acount for Stack Overflow API
-    getSortedRowModel: getSortedRowModel(),
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
   });

@@ -9,9 +9,13 @@ export const metadata: Metadata = {
   description: "Stack Overflow tags browser using Tanstack Table.",
 };
 
-export default async function TaskPage({ searchParams }: { searchParams: { pagesize: string; page: string } }) {
-  const { page, pagesize } = searchParams;
-  const searchParamsString = String(page) + String(pagesize);
+export default async function TaskPage({
+  searchParams,
+}: {
+  searchParams: { pagesize: string; page: string; order: string; sort: string };
+}) {
+  const { page, pagesize, sort, order } = searchParams;
+  const searchParamsString = String(page) + String(pagesize) + String(sort) + String(order);
 
   return (
     <>
@@ -23,7 +27,7 @@ export default async function TaskPage({ searchParams }: { searchParams: { pages
           </div>
         </div>
         <Suspense key={searchParamsString} fallback={<TableSkeleton />}>
-          <Table page={page} pagesize={pagesize} />
+          <Table page={page} pagesize={pagesize} sort={sort} order={order} />
         </Suspense>
       </div>
     </>

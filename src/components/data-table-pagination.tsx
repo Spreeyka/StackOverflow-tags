@@ -13,7 +13,7 @@ interface DataTablePaginationProps<TData> {
 export function DataTablePagination<TData>({ table, disabled }: DataTablePaginationProps<TData>) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
-  const { replace, refresh } = useRouter();
+  const { replace } = useRouter();
   const params = new URLSearchParams(searchParams);
 
   return (
